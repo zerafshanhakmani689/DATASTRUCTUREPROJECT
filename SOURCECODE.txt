@@ -1,0 +1,3783 @@
+#include <iostream>
+#include <stdio.h>
+#include<iomanip>
+#include <stdlib.h>
+#include <fstream>
+#include <string>
+#include <string.h>
+#include <cctype>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
+#include <dos.h>
+using namespace std;
+struct person
+{
+	string id;
+	string Firstname;
+	string Lastname;
+	string email;
+	string password;
+	string mob;
+	string type;
+	string date;
+	struct person *next;
+	struct person *prev;
+};
+class Person
+{
+	struct person *head;
+public:
+	Person()
+	{
+		head = NULL;
+	}
+	string getEmail();
+
+	void SaveEmail(string);
+	bool SearchEmail(string Email);
+	void CustomerInfoBynames();
+	void Search_Customers_BinarySearch(person *ptr);
+	string ValidCreditCard(string);
+	void SortByDates();
+	string Valid_email(string e);
+	string Valid_Mob_No(string no);
+	void Registration();
+	void Customer_Home();
+	void PlaceOrder();
+	void checkout();
+	void ViewOrder();
+	void My_Cart();
+	void PaymentInfo();
+	void Admin_Home();
+	void customer_Info();
+	void order_Details();
+	bool Login(string email, string password);
+	void read(person *ptr);
+	void display(person *ptr);
+	void ChangePassword(string, string);
+	void customerSortbyID(person *curr);
+	void binarySearch(string id);
+};
+struct restaurant
+{
+	string RID;
+	string name;
+	string area;
+	struct restaurant *next;
+	struct restaurant *prev;
+};
+class Restaurant
+{
+	restaurant *rHead;
+
+public:
+	Restaurant()
+	{
+		rHead = NULL;
+
+	}
+
+	string ValidPrice(string a);
+	void SortRestaurantNames();
+	bool searchRestaurantFromRestaurantFile(string a);
+	string Valid_ID(string no);
+	string Valid_Name(string no);
+	string Valid_Name2(string no);
+	void DeleteArea(string a);
+	bool searchAreaFromAreaFile(string area);
+	void updateArea(string a);
+	void Read_Resturant_Menu(restaurant *curr, string s);
+	void delete_Resturant();
+	void display();
+	bool searchArea_NameFromRestaurantFile(string n, string a);
+	void read_restaurant(restaurant *curr); //done
+	void resturant_List();
+	void add_restaurant(); //done
+	void Area_resturant_List();
+	void update_Resturant(); //done
+	void Food_Menu();
+	void writeInRestaurantFile(restaurant *curr);
+	bool searchAreaFromRestaurantFile(string a);
+	void read_area(restaurant *ptr);
+	void write(string n);
+	void delete_wholeResturant(string n, restaurant *r);
+	void displayCustomerRestaurant(string a);
+};
+struct orderNode
+{
+	string id;
+	string Firstname;
+	string Lastname;
+	int quantity;
+	string password;
+	string mob;
+	string type;
+	string food_name;
+	string restaurant_name;
+	string price;
+	string Total_price;
+	string email;
+	string payment;
+	string status;
+	struct orderNode *next;
+	struct orderNode *prev;
+
+};
+class Order
+{
+	struct	orderNode *oHead;
+public:
+	Order(){
+		oHead = NULL;
+	}
+	void Mycart();
+	void 	pp(int n, string cr, string ba, string sa, string status);
+	void Payment_on_cart(int n, string c, string ba, string sa);
+	void WriteInOrders(orderNode *o, int n);
+	void updateOrder(string res, string fn, int qty);
+	void readOrder(orderNode *o);
+	void PlaceOrder();
+	void Customer_write(person *curr);
+	void checkout();
+	void writeOrder(string rest, string id, string fn, string price, int qty);
+	void ReadMyCart(orderNode *o);
+	bool searchFood(string rest, string fn);
+	void displayMyCart();
+	void Order_Details();
+};
+struct customerNode{
+	string rname;
+	string id;
+	string fname;
+	string price;
+	customerNode *next;
+	customerNode *prev;
+
+};
+struct rev{
+	string oid;
+	int total;
+	int profit;
+	rev *next;
+	rev *prev;
+};
+class revenue{
+	rev *revHead;
+public:
+	revenue(){
+		revHead = NULL;
+	}
+	void readRevenue(rev *ptr);
+	void diplayRevenue();
+	void writeRevenue(string oid, int total, int profit);
+};
+void revenue::readRevenue(rev *current){
+	current = new rev;
+	revHead = NULL;
+	string oid;
+	int total, profit;
+	ifstream read;
+	read.open("REVENUE.txt");
+	while (read >> oid >> total >> profit){
+		rev *node = new rev;
+		node->oid = oid;
+		node->total = total;
+		node->profit = profit;
+		node->next = NULL;
+		if (revHead == NULL)
+		{
+			node->prev = NULL;
+			revHead = node;
+		}
+		else
+		{
+			current = revHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+		}
+	}
+	read.close();
+}
+void revenue::writeRevenue(string oid, int tp, int profit){
+	rev *curr = new rev;
+	rev *node = new rev;
+
+	node->oid = oid;
+	node->total = tp;
+	node->profit = profit;
+	node->next = NULL;
+	node->prev = NULL;
+
+	revHead = NULL;
+	readRevenue(curr);
+	if (revHead == NULL){
+		revHead = node;
+	}
+	else{
+		curr = revHead;
+		while (curr->next != NULL){
+			curr = curr->next;
+		}
+		curr->next = node;
+		node->prev = curr;
+	}
+
+	remove("REVENUE.txt");
+	ofstream write("REVENUE.txt");
+	curr = revHead;
+	while (curr != NULL)
+	{
+		write << curr->oid << "\t";
+		write << curr->total << "\t";
+		write << curr->profit << "\t";
+		write << endl;
+		curr = curr->next;
+	}
+	write.close();
+}
+class Customer{
+	customerNode *cHead;
+public:
+	Customer(){
+		cHead = NULL;
+	}
+	void SortMenuByPrice(string a);
+	void InsertInFoodMenu(string rest);
+	void displayWholeMenu(string);
+	void AddOrder(string rest, string fn, int qty);
+	bool searchOrder(string rest, string fn);
+	void displayMenu(string a);
+	void readMenu(customerNode *curr);
+	void DeleteMenu(string rn);
+	void WriteInRestaurantList(customerNode *curr);
+	void updateFoodMenu(string rest, string fn);
+	bool addFood(string rn, string id, string fn, string price);
+};
+void Person::read(person *curr)
+{
+	string i, fn, ln, m, e, p, t, d;
+
+	curr = NULL;
+
+	ifstream fin;
+	fin.open("PersonRecord.txt");
+	while (fin >> i >> fn >> ln >> m >> e >> p >> t >> d)
+	{
+		person *newNode = new person;
+		newNode->id = i;
+		newNode->Firstname = fn;
+		newNode->Lastname = ln;
+		newNode->mob = m;
+		newNode->email = e;
+		newNode->password = p;
+		newNode->type = t;
+		newNode->date = d;
+		newNode->next = NULL;
+		if (head == NULL)
+		{
+			newNode->prev = NULL;
+			head = newNode;
+		}
+		else
+		{
+			curr = head;
+			while (curr->next != NULL)
+			{
+				curr = curr->next;
+			}
+			newNode->prev = curr;
+			curr->next = newNode;
+
+		}
+	}
+	fin.close();
+
+}
+void Person::CustomerInfoBynames()
+{
+	system("cls");
+	struct person *curr = new person;
+	curr = NULL;
+	cout << "*********************************************Customers Record****************************************************" << endl;
+	read(curr);
+	if (head == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+
+		int count = 0;
+		curr = head;
+		while (curr != NULL)
+		{
+			count++;
+			curr = curr->next;
+
+		}
+
+
+		for (int i = 0; i < count; i++)
+		{
+			curr = head;
+			for (int j = 0; j < count - 1; j++)
+			{
+				if (curr->Firstname[0]>curr->next->Firstname[0])
+				{
+					swap(curr->type, curr->next->type);
+
+					swap(curr->Firstname, curr->next->Firstname);
+					swap(curr->Lastname, curr->next->Lastname);
+					swap(curr->email, curr->next->email);
+					swap(curr->mob, curr->next->mob);
+					swap(curr->id, curr->next->id);
+					swap(curr->date, curr->next->date);
+
+				}
+				else if (curr->Firstname[0] == curr->next->Firstname[0])
+				{
+					if (curr->Firstname[1] > curr->next->Firstname[1])
+					{
+						swap(curr->type, curr->next->type);
+
+						swap(curr->Firstname, curr->next->Firstname);
+						swap(curr->Lastname, curr->next->Lastname);
+						swap(curr->email, curr->next->email);
+						swap(curr->mob, curr->next->mob);
+						swap(curr->id, curr->next->id);
+						swap(curr->date, curr->next->date);
+
+					}
+					else if (curr->Firstname[1] == curr->next->Firstname[1])
+					{
+						if (curr->Firstname[2] > curr->next->Firstname[2])
+						{
+							swap(curr->type, curr->next->type);
+							swap(curr->type, curr->next->type);
+
+							swap(curr->Firstname, curr->next->Firstname);
+							swap(curr->Lastname, curr->next->Lastname);
+							swap(curr->email, curr->next->email);
+							swap(curr->mob, curr->next->mob);
+							swap(curr->id, curr->next->id);
+							swap(curr->date, curr->next->date);
+
+						}
+					}
+				}
+				curr = curr->next;
+
+			}
+
+
+		}
+
+
+		curr = head;
+		cout << "ID\tFirstname\t   lastname\t\tMobile\t\t\tEmail\t\t\tRegistration_Date" << endl;
+		while (curr != NULL)
+		{
+			if (curr->type == "User")
+			{
+				if (curr->Firstname.length() <= 6)
+				{
+
+					cout << curr->id << "\t";
+
+					cout << curr->Firstname << "\t\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t  ";
+
+				}
+				else
+				{
+					cout << curr->id << "\t";
+					cout << curr->Firstname << "\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t";
+				}
+				cout << endl;
+
+			}
+			curr = curr->next;
+		}
+
+
+
+	}
+}
+void Person::customerSortbyID(person *curr){
+	system("cls");
+	int count = 0;
+	curr = new person;
+	read(curr);
+	curr = head;
+	if (head == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		for (curr = head; curr->next != NULL; curr = curr->next)
+		{
+
+			person *smallest = curr;
+			for (person *j = curr->next; j != NULL; j = j->next)
+			{
+				if (smallest->id > j->id)
+				{
+					smallest = j;
+				}
+			}
+			swap(smallest->id, curr->id);
+			swap(smallest->Firstname, curr->Firstname);
+			swap(smallest->Lastname, curr->Lastname);
+			swap(smallest->mob, curr->mob);
+			swap(smallest->email, curr->email);
+			swap(smallest->password, curr->password);
+			swap(smallest->type, curr->type);
+			swap(smallest->date, curr->date);
+		}
+		curr = head;
+		cout << "ID\tFirstname\t   lastname\t\tMobile\t\t\tEmail\t\t\tRegistration_Date" << endl;
+		while (curr != NULL)
+		{
+			if (curr->type == "User")
+			{
+				if (curr->Firstname.length() <= 6)
+				{
+
+					cout << curr->id << "\t";
+
+					cout << curr->Firstname << "\t\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t  ";
+
+				}
+				else
+				{
+					cout << curr->id << "\t";
+					cout << curr->Firstname << "\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t";
+				}
+				cout << endl;
+
+			}
+			curr = curr->next;
+		}
+
+	}
+
+}
+void Person::binarySearch(string id){
+	person *curr = new person;
+	curr = NULL;
+	customerSortbyID(curr);
+	curr = head;
+	int count = 0;
+	person *idF = curr;
+	while (curr->next != NULL){
+		count++;
+		curr = curr->next;
+	}
+	person *idL = curr;
+	int mid = (count) / 2;
+	curr = head;
+	int count1 = 0;
+	while (curr != NULL){
+		count1++;
+		curr = curr->next;
+		if (count1 == mid){
+			break;
+		}
+	}
+	person *idM = curr;
+	while (idF->id < idL->id){
+		if (idM->id == id){
+			cout << "***************************** Customer Record *****************************" << endl;
+			cout << curr->id << "\t";
+			cout << curr->Firstname << "\t";
+			cout << curr->Lastname << "\t";
+			cout << curr->mob << "\t";
+			cout << curr->email << "\t";
+			cout << curr->type << "\t";
+			cout << curr->date << "\t";
+			cout << endl;
+			break;
+		}
+		else if (idM->id < id){
+			idF = idM->next;
+		}
+		else if (idM->id > id){
+			idL = idM->prev;
+		}
+		else{
+			cout << "\t\t************ " << id << " Does Not Exist! **************" << endl;
+		}
+		int n1 = stoi(idF->id);
+		int n2 = stoi(idL->id);
+		int n3 = (n1 + n2) / 2;
+		curr = head;
+		int c = 0;
+		while (curr != NULL){
+			c++;
+			curr = curr->next;
+			if (c == n3){
+				break;
+			}
+		}
+		idM = curr;
+	}
+}
+void Customer::SortMenuByPrice(string a)//show restaurant menu to customer sort by price selection sort
+{
+	system("cls");
+	int count = 0;	customerNode *curr = new customerNode;
+	int al = a.length();
+	for (int i = 0; i < al; i++)
+	{
+		a[i] = toupper(a[i]);
+	}
+	readMenu(curr);
+
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		for (curr = cHead; curr->next != NULL; curr = curr->next)
+		{
+
+			customerNode *smallest = curr;
+			for (customerNode *j = curr->next; j != NULL; j = j->next)
+			{
+				if (smallest->price > j->price)
+				{
+					smallest = j;
+				}
+			}
+			swap(smallest->price, curr->price);
+			swap(smallest->rname, curr->rname);
+			swap(smallest->fname, curr->fname);
+			swap(smallest->id, curr->id);
+
+
+
+
+		}
+		curr = cHead;
+		cout << "=======================================================================================================" << endl;
+		cout << "S.No\t\t\tName\t\t\tPrice" << endl;
+		cout << "=======================================================================================================" << endl;
+		while (curr->next != NULL)
+		{
+
+
+			if (a == curr->rname)
+			{
+				count++;
+
+				cout << count << "\t\t\t";
+				if (curr->fname.length() <= 6)
+				{
+					cout << curr->fname << "\t\t\t";
+
+				}
+				else
+				{
+					cout << curr->fname << "\t\t";
+
+				}
+				cout << curr->price;
+				cout << endl;
+			}
+			curr = curr->next;
+		}
+	}
+}
+string Restaurant::ValidPrice(string no)
+{
+	bool s;
+
+	do
+	{
+		cout << "ENTER PRICE:\t ";
+		cin >> no;
+		s = true;
+		int k = no.length();
+
+		for (int i = 0; i < k; i++)
+		{
+			if (no[i] <= '9' && no[i] >= '0')
+			{
+
+				s = true;
+
+			}
+			else
+			{
+				cout << "Invalid Input! Enter Again" << endl;
+				s = false;
+				break;
+			}
+
+		}
+	} while (s == false);
+	return no;
+}
+bool Customer::searchOrder(string rest, string fn)
+{
+	Order oo;
+	int l = rest.length();
+	for (int i = 0; i < l; i++)
+	{
+		rest[i] = toupper(rest[i]);
+	}
+	int fl = fn.length();
+	for (int i = 0; i < fl; i++)
+	{
+		fn[i] = toupper(fn[i]);
+	}
+	bool s = false;
+	customerNode *r = new customerNode;
+	r = NULL;
+	cHead = NULL;
+	readMenu(r);
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		r = cHead;
+		while (r != NULL)
+		{
+			if (r->fname == fn && r->rname == rest)
+			{
+				s = true;
+			}
+			r = r->next;
+		}
+	}
+	return s;
+}
+bool Restaurant::searchAreaFromAreaFile(string a)
+{
+	int l = a.length();
+	for (int i = 0; i < l; i++)
+	{
+		a[i] = toupper(a[i]);
+
+	}
+
+	bool s = false;
+	restaurant *r = NULL;
+	rHead = NULL;
+	read_area(r);
+	if (rHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		r = rHead;
+		while (r != NULL)
+		{
+			if (r->area == a)
+			{
+				s = true;
+				break;
+			}
+			r = r->next;
+		}
+	}
+	return s;
+}
+bool Restaurant::searchAreaFromRestaurantFile(string a)
+{
+	int al = a.length();
+	for (int i = 0; i < al; i++)
+	{
+		a[i] = toupper(a[i]);
+
+	}
+	bool s = false;
+	restaurant *r = new restaurant;
+	rHead = NULL;
+	read_restaurant(r);
+	if (rHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		r = rHead;
+		while (r->next != NULL)
+		{
+			if (r->area == a)
+			{
+				s = true;
+				break;
+			}
+			r = r->next;
+		}
+	}
+	return s;
+}
+bool Restaurant::searchRestaurantFromRestaurantFile(string a)
+{
+	int al = a.length();
+	for (int i = 0; i < al; i++)
+	{
+		a[i] = toupper(a[i]);
+
+	}
+	bool s = false;
+	restaurant *r = new restaurant;
+	rHead = NULL;
+	read_restaurant(r);
+	if (rHead == NULL)
+	{
+		cout << "EMPTY" << endl;
+	}
+	else
+	{
+		r = rHead;
+		while (r->next != NULL)
+		{
+
+			if (r->name == a)
+			{
+
+				s = true;
+				break;
+			}
+			r = r->next;
+		}
+	}
+	return s;
+}
+void revenue::diplayRevenue()
+{
+	rev *curr = new rev;
+	int tp = 0;
+	readRevenue(curr);
+	curr = revHead;
+	if (revHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		system("cls");
+		cout << "=========================================================================" << endl;
+
+		cout << "Name\t\t\tTotalBill\t\t\tProfit" << endl;
+		cout << "=========================================================================" << endl;
+
+		while (curr != NULL)
+		{
+			cout << curr->oid << "\t\t\t";
+			cout << curr->total << "\t\t\t";
+			cout << curr->profit << endl;
+			cout << endl;
+			tp += curr->profit;
+			curr = curr->next;
+		}
+		cout << "=========================================================================" << endl;
+
+		cout << "\t\t\t Total Profit: " << tp << endl;
+
+		cout << "=========================================================================" << endl;
+
+
+	}
+}
+//ADMIN FUNCTIONS
+void Restaurant::DeleteArea(string a)//area will be deleted if no restaurant exist on that location
+{
+	restaurant *curr = new restaurant;
+	read_area(curr);
+	if (rHead == NULL)
+	{
+		cout << "ALREADY EMPTY" << endl;
+	}
+	else
+	{
+		curr = rHead;
+		while (curr != NULL)
+		{
+			if (curr->area == a && curr->prev == NULL)
+			{
+				rHead = curr->next;
+				delete(curr);
+			}
+			else if (curr->area == a && curr->next == NULL){
+				curr->prev->next = NULL;
+				delete(curr);
+			}
+			else if (curr->area == a && curr->next == NULL && curr->prev == NULL){
+				rHead = NULL;
+			}
+			else if (curr->area == a){
+				curr->prev->next = curr->next;
+				curr->next->prev = curr->prev;
+			}
+
+			curr = curr->next;
+		}
+	}
+	remove("AREA.txt");
+	ofstream write("AREA.txt", ios::app);
+	curr = rHead;
+	while (curr != NULL)
+	{
+		write << curr->RID << "\t";
+		write << curr->area << "\t";
+		write << endl;
+		curr = curr->next;
+	}
+	write.close();
+}
+bool Customer::addFood(string rest, string id, string fn, string price)//add menu
+{
+	bool s = false;
+	customerNode *temp = new customerNode;
+	customerNode *cNode;
+	int l = fn.length();
+	for (int i = 0; i < l; i++)
+	{
+		fn[i] = toupper(fn[i]);
+	}
+	cNode = NULL;
+	cHead = NULL;
+	temp->rname = rest;
+	temp->id = id;
+	temp->fname = fn;
+	temp->price = price;
+	temp->prev = NULL;
+	temp->next = NULL;
+	readMenu(cNode);
+
+	if (cHead == NULL)
+	{
+		s = true;
+		cHead = temp;
+
+	}
+	else
+	{
+		cNode = cHead;
+		while (cNode->next != NULL)
+		{
+			s = true;
+			cNode = cNode->next;
+		}
+		temp->prev = cNode;
+		temp->next = NULL;
+		cNode->next = temp;
+
+	}
+	if (s == true)
+	{
+		cout << "ADDED!" << endl;
+	}
+	remove("RESTAURANT-MENU.txt");
+	ofstream write("RESTAURANT-MENU.txt", ios::app);
+	cNode = cHead;
+	while (cNode != NULL)
+	{
+		write << cNode->rname << "\t";
+		write << cNode->id << "\t";
+		write << cNode->fname << "\t";
+		write << cNode->price << "\t";
+		write << endl;
+		cNode = cNode->next;
+	}
+	write.close();
+
+	return s;
+}
+void Order::readOrder(orderNode *current)
+{
+	current = new orderNode;
+	oHead = NULL;
+	string rn, id, f, p, e, tp;
+	ifstream read;
+	read.open("Order.txt");
+	while (read >> rn >> id >> f >> p >> e)
+	{
+		orderNode *node = new orderNode;
+		node->id = rn;
+		node->Firstname = id;
+		node->Lastname = f;
+		node->mob = p;
+		node->email = e;
+		node->next = NULL;
+		if (oHead == NULL)
+		{
+			node->prev = NULL;
+			oHead = node;
+		}
+		else
+		{
+			current = oHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+		}
+	}
+	read.close();
+}
+void Order::Order_Details()
+{
+	string line;
+	ifstream read;
+	read.open("Order.txt");
+	while (!read.eof())
+	{
+		getline(read, line);
+		cout << line << "\t" << endl;
+	}
+	read.close();
+}
+void Customer::WriteInRestaurantList(customerNode *curr)//writing menu in menu file
+{
+	remove("RESTAURANT-MENU.txt");
+	ofstream write("RESTAURANT-MENU.txt");
+	curr = cHead;
+	while (curr != NULL)
+	{
+
+
+		write << curr->rname << "\t";
+		write << curr->id << "\t";
+		write << curr->fname << "\t";
+		write << curr->price << "\t";
+		write << endl;
+		curr = curr->next;
+	}
+	write.close();
+}
+void Restaurant::Read_Resturant_Menu(restaurant *ptr, string s)//fetching restaurant menu from menu file
+{
+	struct restaurant  *curr = new restaurant;
+	ptr = new restaurant;
+	read_restaurant(ptr);
+	ptr = rHead;
+	while (ptr->next != NULL){
+		if (ptr->name == s){
+
+		}
+	}
+
+}
+void Customer::InsertInFoodMenu(string rest)
+{
+
+	bool s = false;
+	customerNode *c = new customerNode;
+	customerNode *temp = new customerNode;
+
+	c = NULL;
+	cHead = NULL;
+	readMenu(c);
+
+	int l = rest.length();
+	for (int i = 0; i < l; i++)
+	{
+		rest[i] = toupper(rest[i]);
+	}
+	string un, up;
+	cout << "Enter Food Name: ";
+	cin >> un;
+	int unl = un.length();
+	for (int i = 0; i < unl; i++)
+	{
+		un[i] = toupper(un[i]);
+	}
+	Customer rr;
+	if (rr.searchOrder(rest, un) == false)
+	{
+		cout << "Enter Price: ";
+		cin >> up;
+		string id = "1";
+		temp->rname = rest;
+		temp->id = id;
+		temp->fname = un;
+		temp->price = up;
+		temp->next = NULL;
+		temp->prev = NULL;
+		if (cHead == NULL)
+		{
+			cHead = temp;
+		}
+		else
+		{
+			c = cHead;
+
+			while (c != NULL)
+			{
+				if (c->rname == rest)
+				{
+					int p = 0;
+					p = stoi(id);
+					while (c->rname == rest)
+					{
+						s = true;
+						p++;
+						c = c->next;
+					}
+					string sid = to_string(p);
+					temp->id = sid;
+					c->prev->next = temp;
+					temp->prev = c->prev;
+					c->prev = temp;
+					temp->next = c;
+					break;
+				}
+				c = c->next;
+			}
+
+			if (s == true)
+			{
+				cout << "Added!" << endl;
+				remove("RESTAURANT-MENU.txt");
+				ofstream write("RESTAURANT-MENU.txt", ios::app);
+				c = cHead;
+				while (c != NULL)
+				{
+					write << c->rname << "\t";
+					write << c->id << "\t";
+					write << c->fname << "\t";
+					write << c->price << "\t";
+					write << endl;
+					c = c->next;
+				}
+				write.close();
+			}
+			else{
+				cout << "Something went wrong..." << endl;
+			}
+		}
+	}
+	else {
+		cout << "This food is already in our menu" << endl;
+	}
+}
+void Customer::updateFoodMenu(string rest, string fn){
+	bool s = false;
+	customerNode *c = new customerNode;
+	c = NULL;
+	cHead = NULL;
+	readMenu(c);
+	int l = rest.length();
+	for (int i = 0; i < l; i++)
+	{
+		rest[i] = toupper(rest[i]);
+	}
+	int fl = fn.length();
+	for (int i = 0; i < fl; i++)
+	{
+		fn[i] = toupper(fn[i]);
+	}
+
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		c = cHead;
+		while (c != NULL)
+		{
+
+			if (c->rname == rest && c->fname == fn)
+			{
+				string un, up;
+				cout << "Enter New Food Name: ";
+				cin >> un;
+				int unl = un.length();
+				for (int i = 0; i < unl; i++)
+				{
+					un[i] = toupper(un[i]);
+				}
+				cout << "Enter Price: ";
+				cin >> up;
+				c->fname = un;
+				c->price = up;
+				s = true;
+			}
+			c = c->next;
+		}
+
+		if (s == true)
+		{
+			cout << "Updated!" << endl;
+			remove("RESTAURANT-MENU.txt");
+			ofstream write("RESTAURANT-MENU.txt", ios::app);
+			c = cHead;
+			while (c != NULL)
+			{
+				write << c->rname << "\t";
+				write << c->id << "\t";
+				write << c->fname << "\t";
+				write << c->price << "\t";
+				write << endl;
+				c = c->next;
+			}
+			write.close();
+		}
+		else{
+			cout << "Something went wrong..." << endl;
+		}
+	}
+}
+void Restaurant::add_restaurant()//Admin can add new restaurant or branch
+{
+	restaurant *newNode = new restaurant;
+	restaurant *curr = new restaurant;
+	Customer cc;
+	bool s = false, exists = false;
+	string n, a, sn, rid = "1";
+	int ridnum;
+	ridnum = stoi(rid);
+	cout << "**********************************************Add New Restaurant*************************************************" << endl;
+	cout << "Enter Name of the Restaurant: ";
+	string nr = Valid_Name2(n);
+
+	cout << "Enter area of the Restaurant: ";
+	string ar = Valid_Name2(a);
+	sn = to_string(ridnum);
+	newNode->RID = sn;
+	int l = nr.length();
+	for (int i = 0; i < l; i++)
+	{
+		nr[i] = toupper(nr[i]);
+
+	}
+	int flag = 0;
+	int arl = ar.length();
+	for (int i = 0; i < arl; i++)
+	{
+		ar[i] = toupper(ar[i]);
+
+	}
+	newNode->name = nr;
+	newNode->area = ar;
+	newNode->next = NULL;
+	rHead = NULL;
+	curr = NULL;
+	read_restaurant(curr);
+	if (rHead == NULL)
+	{
+
+		newNode->prev = NULL;
+		rHead = newNode;
+	}
+	else
+	{
+		curr = rHead;
+		while (curr->next != NULL)
+		{
+			if (curr->name == nr && curr->area == ar){
+				s = true;
+				break;
+			}
+			if (curr->name == nr){
+				exists = true;
+			}
+
+			curr = curr->next;
+
+		}
+		ridnum = stoi(curr->RID);
+		ridnum++;
+		sn = to_string(ridnum);
+	}
+	if (s == false)
+	{
+		newNode->RID = sn;
+		newNode->prev = curr;
+		curr->next = newNode;
+	}
+	else{
+		flag = 1;
+		cout << "Restaurant Already Exists in that Area" << endl;
+	}
+	remove("RESTAURANT-LIST.txt");
+	ofstream wr("RESTAURANT-LIST.txt", ios::app);
+	curr = rHead;
+	while (curr != NULL)
+	{
+		wr << curr->RID << "\t";
+		wr << curr->name << "\t";
+		wr << curr->area << "\t";
+		wr << endl;
+		curr = curr->next;
+	}
+	wr.close();
+	if (searchAreaFromAreaFile(ar) == false)
+	{
+		write(ar);
+	}
+	int id = 0;
+	if (exists == false){
+		string sid, fn, p;
+		char ch;
+		cout << "Create Menu" << endl;
+		do{
+			id++;
+
+			cout << "Enter Food Name: ";
+
+			string ss;
+			string t;
+			fn = Valid_Name2(ss);
+			cout << "Enter Price: ";
+			p = ValidPrice(t);
+
+			sid = to_string(id);
+			if (cc.addFood(nr, sid, fn, p) == true)
+			{
+				cout << "Item Added!";
+			}
+			else{
+				cout << "Something Went Wrong...";
+			}
+			cout << "Continue Adding Items to the Menu? [y/n]: ";
+			cin >> ch;
+		} while (ch == 'y' || ch == 'Y');
+	}
+	else
+	{
+		if (flag == 0)
+		{
+			cout << "New Branch Added!" << endl;
+		}
+
+	}
+
+}
+void Restaurant::delete_wholeResturant(string key, restaurant *temp)//admin is deleting all branches
+{
+
+	temp = rHead;
+	restaurant *prev = NULL;
+	restaurant *next = new restaurant;
+	int el = key.length();
+	for (int i = 0; i < el; i++){
+		key[i] = toupper(key[i]);
+
+	}
+	for (temp = rHead; temp != NULL; temp = next)
+	{
+		next = temp->next;
+
+		if (temp->name != key)
+		{
+			prev = temp;
+			continue;
+		}
+
+		if (prev != NULL)
+			prev->next = next;
+		else
+			rHead = next;
+
+		delete temp;
+	}
+	cout << "All branches of " + key + " is Deleted!" << endl;
+	writeInRestaurantFile(temp);
+	Customer c;
+	c.DeleteMenu(key);
+}
+void Restaurant::delete_Resturant()//admin is deleting specific branch
+{
+
+	char s;
+	bool st = false;
+	int p = 0;
+	string n, b;
+	restaurant *previousptr = new restaurant;
+	do{
+		int c;
+		p = 0;
+		cout << "To Delete Branch of the Restaurant Press '1': " << endl;
+		cout << "To Delete the Whole of the Restaurant, Press '2': " << endl;
+		cin >> c;
+		if (c == 1){
+			p = 0;
+			restaurant *curr = new restaurant;
+			rHead = NULL;
+			read_restaurant(curr);
+			curr = rHead;
+			cout << "Enter Name of the Restaurant: ";
+			cin >> n;
+			cout << "Enter Brach/Area of the Restaurant: ";
+			cin >> b;
+			int el = n.length();
+			for (int i = 0; i < el; i++){
+				n[i] = toupper(n[i]);
+
+			}
+			int l = b.length();
+			for (int i = 0; i < l; i++){
+				b[i] = toupper(b[i]);
+
+			}
+			while (curr->next != NULL)
+			{
+				previousptr = curr;
+				p++;
+				if (rHead == NULL)
+				{
+					cout << "No Restaurants Listed!" << endl;
+					break;
+				}
+				else if (curr->prev != NULL && curr->next == NULL && curr->name == n && curr->area == b)
+				{
+					cout << curr->name << " " << curr->area << " Deleted!" << endl;
+					curr->prev->next = NULL;
+					delete(curr);
+					st = true;
+					break;
+				}
+				else if (curr->next == NULL && curr->prev == NULL && curr->name == n && curr->area == b)
+				{
+					cout << curr->name << " " << curr->area << " Deleted!" << endl;
+					rHead = curr->next;
+					p = 0;
+					st = true;
+
+					delete(curr);
+					break;
+				}
+				else if (curr->next != NULL && curr->prev == NULL && curr->name == n && curr->area == b)
+				{
+					cout << curr->name << " " << curr->area << " Deleted!" << endl;
+					rHead = curr->next;
+					st = true;
+
+					delete(curr);
+					break;
+				}
+				else if (p == 1 && curr->name == n && curr->area == b)
+				{
+					cout << curr->name << " " << curr->area << " Deleted!" << endl;
+					rHead = curr->next;
+					p = 0;
+					st = true;
+
+					delete(curr);
+					break;
+				}
+				else if (p >= 2 && curr->name == n && curr->area == b){
+					curr->prev->next = curr->next;
+					curr->next->prev = curr->prev;
+					cout << curr->name << " " << curr->area << " Deleted!" << endl;
+					st = true;
+
+					delete(curr);
+					break;
+				}
+				curr = curr->next;
+			}
+			if (curr->prev != NULL && curr->next == NULL && curr->name == n && curr->area == b){
+				cout << curr->name << " " << curr->area << " Deleted!" << endl;
+				curr->prev->next = NULL;
+				st = true;
+
+				delete(curr);
+				break;
+			}
+			if (st == false)
+			{
+				cout << "No branch found" << endl;
+			}
+			writeInRestaurantFile(curr);
+			curr = NULL;
+		}
+		else if (c == 2)
+		{
+			Restaurant R;
+			cout << "Enter Name of Restaurant to be Deleted: ";
+			cin >> n;
+			restaurant *r = new restaurant;
+			read_restaurant(r);
+			if (searchRestaurantFromRestaurantFile(n) == true)
+			{
+				delete_wholeResturant(n, r);
+			}
+			else
+			{
+				cout << "Sorry " + n + " doesn't Exist" << endl;
+			}
+		}
+
+
+		cout << "Want to continue? [y/n]: ";
+		cin >> s;
+	} while (s == 'y' || s == 'Y');
+}
+void Restaurant::writeInRestaurantFile(restaurant *curr)//writing new restaurant in file
+{
+	remove("RESTAURANT-LIST.txt");
+	ofstream write("RESTAURANT-LIST.txt");
+	curr = rHead;
+	while (curr != NULL)
+	{
+
+		write << curr->RID << "\t";
+		write << curr->name << "\t";
+		write << curr->area << "\t";
+		write << endl;
+		curr = curr->next;
+	}
+	write.close();
+}
+void Restaurant::read_restaurant(restaurant *current)//fetch data from restaurant list file
+{
+
+	current = new restaurant;
+	rHead = NULL;
+	string id, n, a;
+	ifstream read;
+	read.open("RESTAURANT-LIST.txt");
+	while (read >> id >> n >> a){
+		restaurant *node = new restaurant;
+		node->RID = id;
+		node->name = n;
+		node->area = a;
+		node->next = NULL;
+		if (rHead == NULL)
+		{
+			node->prev = NULL;
+			rHead = node;
+		}
+		else
+		{
+			current = rHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+
+		}
+	}
+
+	read.close();
+}
+void Restaurant::update_Resturant()//ADMIN CAN UPDATE RESTAURANT AREA
+{
+	Restaurant r;
+	bool s;
+	struct restaurant *ptr, *currentptr, *newptr;
+	ptr = new restaurant;
+	newptr = new restaurant;
+	currentptr = new restaurant;
+	rHead = NULL;
+	currentptr = NULL;
+	read_restaurant(currentptr);
+
+	string rid, a;
+	cout << "**********************************************Update Restaurant Area*************************************************" << endl;
+	string ID = Valid_ID(rid);
+	cout << "Enter area of the Restaurant: ";
+	string a1 = Valid_Name2(a);
+	int f = a1.length();
+	for (int i = 0; i < f; i++)
+	{
+		a1[i] = toupper(a1[i]);
+
+	}
+	string temp;
+	if (rHead == NULL)
+	{
+		cout << "Restaurant list is already empty " << endl;
+	}
+	else
+	{
+		currentptr = rHead;
+		int pos = 0;
+		while (currentptr != NULL)
+		{
+			pos++;
+			if (ID == currentptr->RID && pos == 1)
+			{
+				s = true;
+				if (currentptr->area != a1)
+				{
+					temp = currentptr->area;
+
+					cout << currentptr->name << " location is updated to " << a1 << "from  " << currentptr->area << endl;
+				}
+				else
+				{
+					cout << "Location is Same" << endl;
+				}
+				currentptr->area = a1;
+				rHead = currentptr;
+				break;
+			}
+			else if (ID == currentptr->RID)
+			{
+				s = true;
+				if (currentptr->area != a1)
+				{
+					temp = currentptr->area;
+					cout << currentptr->name << "  location is updated to  " << a1 << " from  " << currentptr->area << endl;
+				}
+				else
+				{
+					cout << "Location is Same" << endl;
+				}
+				currentptr->area = a1;
+				break;
+			}
+			else
+			{
+				s = false;
+				currentptr = currentptr->next;
+
+			}
+		}
+		if (s == false)
+		{
+			cout << "No Resuturant Found of ID: " << ID;
+			cout << endl;
+		}
+		if (rHead != NULL)
+		{
+			remove("RESTAURANT-LIST.txt");
+			ofstream write("RESTAURANT-LIST.txt");
+			currentptr = rHead;
+			while (currentptr != NULL)
+			{
+				write << currentptr->RID << "\t";
+				write << currentptr->name << "\t";
+				write << currentptr->area << "\t";
+				write << endl;
+				currentptr = currentptr->next;
+			}
+			write.close();
+
+		}
+	}
+	if (searchAreaFromRestaurantFile(temp) == false)
+	{
+		DeleteArea(temp);
+	}
+	if (searchAreaFromAreaFile(a1) == false)
+	{
+		write(a1);
+	}
+
+}
+void Person::customer_Info()//DISPLAY CUSTOMER RECORD TO ADMIN
+{
+	int n = 0;
+	struct person *curr = new person;
+	system("cls");
+	curr = NULL;
+	cout << "*********************************************Customers Record****************************************************" << endl;
+	read(curr);
+	if (head == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		curr = head;
+		cout << "ID\tFirstname\t   lastname\t\tMobile\t\t\tEmail\t\t\tRegistration_Date" << endl;
+		while (curr != NULL)
+		{
+			if (curr->type == "User")
+			{
+				if (curr->Firstname.length() <= 6)
+				{
+
+					cout << curr->id << "\t";
+
+					cout << curr->Firstname << "\t\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t  ";
+
+				}
+				else
+				{
+					cout << curr->id << "\t";
+					cout << curr->Firstname << "\t   ";
+					cout << curr->Lastname << "\t\t";
+					cout << curr->mob << "\t\t";
+					cout << curr->email << "\t\t";
+					cout << curr->date << "\t\t";
+				}
+				cout << endl;
+
+			}
+			curr = curr->next;
+		}
+
+
+
+	}
+}
+void Restaurant::display()//DISPLAY RESTAURANT LIST TO ADMIN
+{
+	restaurant *curr = new restaurant;
+	read_restaurant(curr);
+	curr = rHead;
+	if (rHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		system("cls");
+		cout << "=========================================================================" << endl;
+
+		cout << "Name\t\t\tArea" << endl;
+		cout << "=========================================================================" << endl;
+
+		while (curr != NULL)
+		{
+			if (curr->name.length() < 8){
+				cout << curr->name << "\t\t\t";
+				cout << curr->area << endl;
+				cout << endl;
+			}
+			else
+			{
+				cout << curr->name << "\t\t";
+				cout << curr->area << endl;
+				cout << endl;
+			}
+			curr = curr->next;
+		}
+
+
+	}
+}
+void Restaurant::write(string a)//writing NEW location in area file IF LOCATION DOESN'T EXIST//WHEN ADMIN ADD NEW RESTAURANT  
+{
+	int al = a.length();
+	for (int i = 0; i < al; i++)
+	{
+		a[i] = toupper(a[i]);
+
+	}
+	restaurant *newNode = new restaurant;
+	restaurant *curr = new restaurant;
+	bool s; rHead = NULL;
+	read_area(curr);
+	curr = rHead;
+	while (curr->next != NULL)
+	{
+		curr = curr->next;
+	}
+	int rid;
+	rid = stoi(curr->RID);
+	rid++;
+	string sid = to_string(rid);
+	newNode->RID = sid;
+	newNode->area = a;
+	newNode->next = NULL;
+	if (rHead == NULL)
+	{
+		newNode->prev = NULL;
+		rHead = newNode;
+	}
+	else
+	{
+		curr = rHead;
+		while (curr->next != NULL)
+		{
+			if (a == curr->area){
+				s = true;
+				break;
+			}
+			else
+			{
+				s = false;
+				curr = curr->next;
+			}
+		}
+		if (s == false){
+			newNode->prev = curr;
+			curr->next = newNode;
+		}
+	}
+	remove("AREA.txt");
+	ofstream write("AREA.txt", ios::app);
+	curr = rHead;
+	while (curr != NULL)
+	{
+		write << curr->RID << "\t";
+		write << curr->area << "\t";
+		write << endl;
+		curr = curr->next;
+	}
+	write.close();
+}
+void Person::SortByDates()//sort customer info by dates AND display admin
+{
+	system("cls");
+	person *curr = new person;
+	char* allMonths[] = { "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" };
+	int count = 0;
+	read(curr);
+	curr = head;
+
+	while (curr != NULL)
+	{
+		count++;
+		curr = curr->next;
+	}
+	for (int i = 0; i < count; i++)
+	{
+		curr = head;
+		for (int j = 0; j < count - 1; j++)
+		{
+
+			int start1 = 0;
+			int end1 = 0;
+			int start = 0;
+			int end = 0;
+			string ss = curr->date;//curr date
+			string s;
+			string cn = curr->next->date;//curr->next date
+			string si;
+			int lengthofcurr = ss.length();//length of curr date
+			int lengthofcurrNext = cn.length();//length of curr->next date
+			string year = ss.substr(lengthofcurr - 4, lengthofcurr);
+			string year2 = cn.substr(lengthofcurrNext - 4, lengthofcurrNext);
+
+
+			for (int d1 = 0; d1<lengthofcurr; d1++)
+			{
+				if (ss[d1] == '-')
+				{
+					start = d1;
+
+					break;
+				}
+			}
+			for (int d1 = start; d1<lengthofcurr; d1++)
+			{
+				if (ss[d1] == '-')
+				{
+					end = d1;
+					break;
+				}
+			}
+			for (int d1 = 0; d1<lengthofcurrNext; d1++)
+			{
+				if (ss[d1] == '-')
+				{
+					start1 = d1;
+
+					break;
+				}
+			}
+			for (int d1 = start; d1<lengthofcurrNext; d1++)
+			{
+				if (ss[d1] == '-')
+				{
+					end1 = d1;
+					break;
+				}
+			}
+			string dd1 = ss.substr(start + 1, end - 1);
+			string dd2 = cn.substr(start1 + 1, end1 - 1);
+
+			int d1 = stoi(dd1);
+			int d2 = stoi(dd2);
+			if (curr->type == "User")
+			{
+				if (year > year2)
+				{
+					swap(curr->Firstname, curr->next->Firstname);
+					swap(curr->Lastname, curr->next->Lastname);
+					swap(curr->email, curr->next->email);
+					swap(curr->mob, curr->next->mob);
+					swap(curr->id, curr->next->id);
+					swap(curr->date, curr->next->date);
+					swap(curr->type, curr->next->type);
+
+				}
+				else if (year == year2){
+					int g = 0;
+					while (ss[g] != '-')
+					{
+						g++;
+					}
+					s = ss.substr(0, g);
+					int mon;
+					for (int i = 0; i < 12; i++)
+					{
+						if (s == allMonths[i])
+						{
+							mon = i;
+							break;
+						}
+					}
+					int f = 0;
+					while (cn[f] != '-')
+					{
+						f++;
+					}
+					si = cn.substr(0, f);
+
+					int mon2;
+					for (int i = 0; i < 12; i++)
+					{
+						if (si == allMonths[i])
+						{
+							mon2 = i;
+							break;
+						}
+					}
+					if (mon>mon2)
+					{
+
+						swap(curr->Firstname, curr->next->Firstname);
+						swap(curr->Lastname, curr->next->Lastname);
+						swap(curr->email, curr->next->email);
+						swap(curr->mob, curr->next->mob);
+						swap(curr->id, curr->next->id);
+						swap(curr->date, curr->next->date);
+						swap(curr->type, curr->next->type);
+
+					}
+					else if (mon == mon2)
+					{
+						if (d1 > d2)
+						{
+							swap(curr->Firstname, curr->next->Firstname);
+							swap(curr->Lastname, curr->next->Lastname);
+							swap(curr->email, curr->next->email);
+							swap(curr->mob, curr->next->mob);
+							swap(curr->id, curr->next->id);
+							swap(curr->date, curr->next->date);
+							swap(curr->type, curr->next->type);
+
+						}
+					}
+				}
+
+			}
+			curr = curr->next;
+		}
+
+	}
+
+	cout << "=========================================================================" << endl;
+
+	curr = head;
+	cout << "ID\tFirstname\t   lastname\t\tMobile\t\t\tEmail\t\t\tRegistration_Date" << endl;
+	while (curr != NULL)
+	{
+		if (curr->type == "User")
+		{
+			if (curr->Firstname.length() <= 6)
+			{
+
+				cout << curr->id << "\t";
+				cout << curr->Firstname << "\t\t   ";
+				cout << curr->Lastname << "\t\t";
+				cout << curr->mob << "\t\t";
+				cout << curr->email << "\t\t";
+				cout << curr->date << "\t\t  ";
+
+			}
+			else
+			{
+				cout << curr->id << "\t";
+
+				cout << curr->Firstname << "\t   ";
+				cout << curr->Lastname << "\t\t";
+				cout << curr->mob << "\t\t";
+
+				cout << curr->email << "\t\t";
+				cout << curr->date << "\t\t";
+			}
+			cout << endl;
+
+		}
+		curr = curr->next;
+
+	}
+}
+void Restaurant::SortRestaurantNames()//sorting RESTAURANTS names
+{
+	restaurant *curr = new restaurant;
+	restaurant *n1 = new restaurant;
+	int count = 0;
+
+	read_restaurant(curr);
+	curr = rHead;
+	while (curr != NULL)
+	{
+		count++;
+		curr = curr->next;
+	}
+
+	for (int i = 0; i < count; i++)
+	{
+		curr = rHead;
+		for (int j = 0; j < count - 1; j++)
+		{
+			if (curr->name[0]>curr->next->name[0])
+			{
+				swap(curr->name, curr->next->name);
+				swap(curr->area, curr->next->area);
+
+			}
+			else if (curr->name[0] == curr->next->name[0])
+			{
+				if (curr->name[1] > curr->next->name[1]){
+					swap(curr->name, curr->next->name);
+					swap(curr->area, curr->next->area);
+
+
+				}
+				else if (curr->name[1] == curr->next->name[1])
+				{
+					if (curr->name[2] > curr->next->name[2])
+					{
+						swap(curr->name, curr->next->name);
+						swap(curr->area, curr->next->area);
+
+					}
+				}
+			}
+			curr = curr->next;
+
+		}
+	}
+	system("cls");
+	cout << "=========================================================================" << endl;
+
+	cout << "Name\t\t\tArea" << endl;
+	cout << "=========================================================================" << endl;
+	curr = rHead;
+	while (curr != NULL)
+	{
+		if (curr->name.length() < 8){
+			cout << curr->name << "\t\t\t";
+			cout << curr->area << endl;
+			cout << endl;
+		}
+		else
+		{
+			cout << curr->name << "\t\t";
+			cout << curr->area << endl;
+			cout << endl;
+		}
+		curr = curr->next;
+	}
+
+}
+void Restaurant::read_area(restaurant *current)//fetching area from area file
+{
+	current = new restaurant;
+	rHead = NULL;
+	string id, name;
+	ifstream read;
+	read.open("AREA.txt");
+	while (read >> id >> name)
+	{
+		restaurant *node = new restaurant;
+		node->RID = id;
+		node->area = name;
+		node->next = NULL;
+		if (rHead == NULL)
+		{
+			node->prev = NULL;
+			rHead = node;
+		}
+		else
+		{
+			current = rHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+		}
+
+	}
+	read.close();
+}
+void Customer::DeleteMenu(string key)//menu will be deleted if admin will delete restaurant and no more restaurant left of that name
+{
+	customerNode *current = new customerNode;
+	readMenu(current);
+	current = cHead;
+	customerNode *prev = NULL;
+	customerNode *next = new customerNode;
+
+	for (current = cHead; current != NULL; current = next)
+	{
+		next = current->next;
+
+		if (current->rname != key) {
+			prev = current;
+			continue;
+		}
+
+		if (prev != NULL)
+			prev->next = next;
+		else
+			cHead = next;
+
+		delete current;
+	}
+	WriteInRestaurantList(current);
+}
+void Customer::displayWholeMenu(string rest)
+{
+	customerNode *curr = new customerNode;
+	readMenu(curr);
+	curr = cHead;
+	Restaurant r;
+
+
+
+	bool s = false;
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		cout << "S.NO\t\t\tName\t\t\tprice" << endl;
+		while (curr->next != NULL)
+		{
+			if (rest == curr->rname)
+			{
+				s = true;
+
+				cout << curr->id << "\t\t\t";
+				if (curr->fname.length() <= 7)
+				{
+					cout << curr->fname << "\t\t\t";
+				}
+				else if (curr->fname.length() > 7 && curr->fname.length() > 15)
+				{
+					cout << curr->fname << "\t";
+
+				}
+				else
+				{
+					cout << curr->fname << "\t\t";
+				}
+				cout << curr->price;
+				cout << endl;
+
+			}
+			curr = curr->next;
+		}
+		if (s == false)
+		{
+			cout << "Entered Restaurant is not avaliable" << endl;
+		}
+	}
+
+}
+//CUSTOMER FUNCTIONS
+void Order::pp(int n, string cr, string ba, string sa, string status)
+{
+	orderNode *o = new orderNode;
+	string sss = "Billing Address";
+	string sss2 = "Shipping Address";
+	string credit = "Payment Info:CREDIT CARD ";
+
+	string cash = "Payment Info:CASH ON DELIVERY ";
+	string c = "=========================================================================";
+	o->Firstname = sss;
+	o->food_name = ba;
+	o->Lastname = sss2;
+	o->type = sa;
+	o->email = c;
+	o->id = cr;
+	o->status = status;
+	if (n == 1)
+	{
+		o->payment = credit;
+
+	}
+	else
+	{
+		o->payment = cash;
+	}
+	ofstream write("Order.txt", ios::app);
+	write << endl;
+	write << o->email << endl;
+	write << o->Firstname << ":\t" << o->food_name << endl;
+	write << o->Lastname << ":\t" << o->type << endl;
+	write << o->payment << endl;
+
+	if (n == 1)
+	{
+		write << "Credit Card Number:\t" << o->id << endl;
+	}
+	write << "Order status:\t" << o->status << endl;
+	write << o->email << endl;
+	write.close();
+}
+void Order::ReadMyCart(orderNode *current){
+	current = new orderNode;
+	oHead = NULL;
+	string rn, id, f, p, e;
+	ifstream read;
+	read.open("MyCart.txt");
+	while (read >> rn >> id >> f >> p >> e)
+	{
+		orderNode *node = new orderNode;
+		node->restaurant_name = rn;
+		node->id = id;
+		node->food_name = f;
+		node->price = p;
+		node->email = e;
+		node->next = NULL;
+		if (oHead == NULL)
+		{
+			node->prev = NULL;
+			oHead = node;
+		}
+		else
+		{
+			current = oHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+		}
+	}
+	read.close();
+}
+void Order::Customer_write(person *curr)//writing customer info in my cart file 
+{
+	remove("MyCart.txt");
+	ofstream write("MyCart.txt", ios::app);
+	write << curr->id << "\t";
+	write << curr->Firstname << "\t";
+	write << curr->Lastname << "\t";
+	write << curr->mob << "\t";
+	write << curr->email << "\t";
+	write << endl;
+	write.close();
+}
+void Order::displayMyCart()
+{
+	oHead = NULL;
+	int tp = 0, p = 0;
+	orderNode *o = new orderNode;
+	o = NULL;
+	ReadMyCart(o);
+	if (oHead == NULL)
+	{
+		cout << "Cart is Empty" << endl;
+	}
+	else
+	{
+		string q1;
+		int q2 = 0;
+		o = oHead->next;
+		while (o != NULL)
+		{
+			p = stoi(o->price);
+			q2 = stoi(o->email);
+
+			tp = tp + (p*q2);
+			o = o->next;
+		}
+		o = oHead;
+		int pos = 0;
+		cout << "=============================================MyCart======================================== " << endl;
+
+		while (o != NULL)
+		{
+			pos++;
+			if (pos == 1)
+			{
+
+				cout << "Customer id:\t" << o->restaurant_name << "\nFirst Name\t" << o->id << "\nLast Name\t" << o->food_name << "\nMobile Number:\t" << o->price << "\nEmail:\t" << o->email;
+			}
+			else
+			{
+				cout << "Resturant Name:\t" << o->restaurant_name << "\nFood id:\t" << o->id << "\nFood Name:\t" << o->food_name << "\nPrice:\t" << o->price << "\nQuantity\t" << o->email;
+			}
+			cout << endl;
+			o = o->next;
+		}
+		cout << "=========================================================================" << endl;
+		cout << "\t\tTotal Price: " << tp << endl;
+		cout << "=========================================================================" << endl;
+
+
+	}
+	WriteInOrders(o, tp);
+}
+void Order::Mycart()
+{
+
+	cout << "=============================================MyCart======================================== " << endl;
+	string line;
+	ifstream read;
+	read.open("MyCart.txt");
+	int count = 0;
+	cout << "CustomerDetails\t" << endl;
+	cout << "*******************************************************************************************" << endl;
+
+	while (!read.eof())
+	{
+		count++;
+
+		getline(read, line);
+		if (count == 1)
+		{
+			cout << "*******************************************************************************************" << endl;
+
+			cout << "ID\tName\tlastname     Mobile      Email" << endl << endl;
+
+		}
+		else if (count == 2)
+		{
+			cout << "*******************************************************************************************" << endl;
+
+			cout << "Rest\tID\tFood\tPrice\tQuantity" << endl;
+			cout << "ID\tName" << endl;
+
+
+		}
+
+		cout << line << "\t\t\t" << endl;
+
+
+	}
+	read.close();
+
+}
+void Customer::readMenu(customerNode *current){
+
+	current = new customerNode;
+	cHead = NULL;
+	string rn, id, f, p;
+	ifstream read;
+	read.open("RESTAURANT-MENU.txt");
+	while (read >> rn >> id >> f >> p){
+		customerNode *node = new customerNode;
+		node->rname = rn;
+		node->id = id;
+		node->fname = f;
+		node->price = p;
+		node->next = NULL;
+		if (cHead == NULL)
+		{
+			node->prev = NULL;
+			cHead = node;
+		}
+		else
+		{
+			current = cHead;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			node->prev = current;
+			current->next = node;
+		}
+	}
+	read.close();
+}
+void Person::display(person *curr)
+{
+
+	curr = head;
+	if (head == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+
+		while (curr = NULL)
+
+		{
+			cout << "Firstname:" << curr->Firstname << endl;
+			cout << "Lastname:" << curr->Lastname << endl;
+			cout << "email:" << curr->email << endl;
+			cout << "mob:" << curr->mob << endl;
+			cout << "password:" << curr->password << endl;
+			cout << "type:" << curr->type << endl;
+			cout << endl;
+			curr = curr->next;
+		}
+	}
+
+}
+void Restaurant::displayCustomerRestaurant(string a)//DISPLAY RESTAURANTS LIST TO CUSTOMER AFTER SELECTING AREA 
+{
+	restaurant *curr = new restaurant;
+	read_restaurant(curr);
+	curr = rHead;
+	if (rHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		while (curr != NULL)
+		{
+			if (a == curr->area){
+
+				cout << curr->name;
+
+				cout << endl;
+			}
+			curr = curr->next;
+		}
+	}
+}
+void Customer::displayMenu(string a)//show restaurant menu to customer
+{
+
+	customerNode *curr = new customerNode;
+	int al = a.length();
+	for (int i = 0; i < al; i++)
+	{
+		a[i] = toupper(a[i]);
+	}
+	readMenu(curr);
+	curr = cHead;
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		cout << "=======================================================================================================" << endl;
+		cout << "S.No\t\t\tName\t\t\tPrice" << endl;
+		cout << "=======================================================================================================" << endl;
+		while (curr->next != NULL)
+		{
+			if (a == curr->rname)
+			{
+				cout << curr->id << "\t\t\t";
+				if (curr->fname.length() <= 6)
+				{
+					cout << curr->fname << "\t\t\t";
+
+				}
+				else
+				{
+					cout << curr->fname << "\t\t";
+
+				}
+				cout << curr->price;
+				cout << endl;
+			}
+			curr = curr->next;
+		}
+	}
+}
+void Order::writeOrder(string rest, string id, string fn, string price, int qty)//writing selected foods in order file 
+{
+	orderNode *o = new orderNode;
+	o->prev = NULL;
+	o->restaurant_name = rest;
+	o->id = id;
+	o->food_name = fn;
+	o->price = price;
+	o->quantity = qty;
+	ofstream write("MyCart.txt", ios::app);
+	write << o->restaurant_name << "\t";
+	write << o->id << "\t";
+	write << o->food_name << "\t";
+	write << o->price << "\t";
+	write << o->quantity << "\t";
+	write << endl;
+	write.close();
+}
+void Restaurant::Area_resturant_List()//Display area list to customer
+{
+	system("cls");
+	restaurant *ptr = new restaurant;
+	read_area(ptr);
+	ptr = rHead;
+	if (rHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		ptr = rHead;
+		while (ptr != NULL)
+		{
+			cout << ptr->area;
+			cout << endl;
+			ptr = ptr->next;
+		}
+	}
+}
+void Customer::AddOrder(string rest, string fn, int qty)//adding order to mycart
+{
+
+	Order oo;
+	int l = rest.length();
+	for (int i = 0; i < l; i++)
+	{
+		rest[i] = toupper(rest[i]);
+	}
+	int fl = fn.length();
+	for (int i = 0; i < fl; i++)
+	{
+		fn[i] = toupper(fn[i]);
+	}
+	bool s = false;
+	customerNode *r = new customerNode;
+	r = NULL;
+	cHead = NULL;
+	readMenu(r);
+
+	if (cHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		r = cHead;
+		while (r != NULL)
+		{
+			if (r->fname == fn && r->rname == rest)
+			{
+				string price = r->price;
+				string id = r->id;
+				oo.writeOrder(rest, id, fn, price, qty);
+			}
+			r = r->next;
+		}
+		cout << fn << " Added!" << endl;
+	}
+
+}
+bool Order::searchFood(string rest, string fn){
+	int q = 0;
+	bool s = false;
+	orderNode *r = new orderNode;
+	r = NULL;
+	oHead = NULL;
+	ReadMyCart(r);
+	int l = rest.length();
+	for (int i = 0; i < l; i++)
+	{
+		rest[i] = toupper(rest[i]);
+	}
+	int fl = fn.length();
+	for (int i = 0; i < fl; i++)
+	{
+		fn[i] = toupper(fn[i]);
+	}
+
+	if (oHead == NULL)
+	{
+		cout << "empty" << endl;
+	}
+	else
+	{
+		r = oHead;
+		while (r != NULL)
+		{
+
+			if (r->restaurant_name == rest  && r->food_name == fn)
+			{
+
+				q = stoi(r->email);
+				q = q + 1;
+				string qty = to_string(q);
+				r->email = qty;
+				s = true;
+			}
+			r = r->next;
+		}
+
+		if (s == true)
+		{
+			remove("MyCart.txt");
+			ofstream write("MyCart.txt", ios::app);
+			r = oHead;
+			while (r != NULL)
+			{
+				write << r->restaurant_name << "\t";
+				write << r->id << "\t";
+				write << r->food_name << "\t";
+				write << r->price << "\t";
+				write << r->email << "\t";
+
+				write << endl;
+				r = r->next;
+			}
+			write.close();
+		}
+	}
+	return s;
+}
+void Person::Registration()//ONLY CUSTOMER CAN REGISTER
+{
+	string id = "1";
+	int ridnum;
+	ridnum = stoi(id);
+	string newid;
+
+	struct person *newptr, *currentptr;
+	newptr = new person;
+	currentptr = new person;
+	read(currentptr);
+	//Person p;
+	string fname, lname, mobile, e, pass;
+	cout << "First Name:";
+
+	Restaurant r;
+	string firstN = r.Valid_Name(fname);
+	cout << endl;
+	cout << "Last name: ";
+	string LastN = r.Valid_Name(lname);
+
+	cout << endl;
+	string m = Valid_Mob_No(mobile);
+	cout << endl;
+	cout << "Email: ";
+	string g = Valid_email(e);
+
+	cout << endl;
+	cout << "Password: ";
+	cin >> pass;
+
+	cout << endl;
+	int fl = firstN.length();
+	for (int i = 0; i < fl; i++)
+	{
+		firstN[i] = toupper(firstN[i]);
+
+	}
+	newptr->Firstname = firstN;
+	int fll = LastN.length();
+	for (int i = 0; i < fll; i++)
+	{
+		LastN[i] = toupper(LastN[i]);
+
+	}
+	newptr->Lastname = LastN;
+	newptr->mob = m;
+	int gl = g.length();
+	for (int i = 0; i < gl; i++)
+	{
+		g[i] = toupper(g[i]);
+
+	}
+	newptr->email = g;
+	int pl = pass.length();
+	for (int i = 0; i < pl; i++)
+	{
+		pass[i] = toupper(pass[i]);
+
+	}
+	newptr->password = pass;
+	newptr->type = "User";
+	if (SearchEmail(g) == false)
+	{
+		string d = __DATE__;
+		for (int i = 0; i < d.length(); i++)
+		{
+			if (d[i] == ' ')
+			{
+				d[i] = '-';
+			}
+		}
+
+		newptr->date = d;
+		newptr->next = NULL;
+
+		if (head == NULL)
+		{
+			newid = to_string(ridnum);
+			newptr->prev = NULL;
+			newptr->id = newid;
+			head = newptr;
+		}
+		else
+		{
+			//int p=0;
+			currentptr = head;
+			while (currentptr->next != NULL)
+			{
+				currentptr = currentptr->next;
+			}
+
+			ridnum = stoi(currentptr->id);
+			ridnum++;
+			newid = to_string(ridnum);
+			newptr->id = newid;
+			newptr->prev = currentptr;
+			currentptr->next = newptr;
+
+
+		}
+
+
+		remove("PersonRecord.txt");
+		ofstream write("PersonRecord.txt", ios::app);
+		currentptr = head;
+		while (currentptr != NULL)
+		{
+			write << currentptr->id << "\t";
+			write << currentptr->Firstname << "\t";
+			write << currentptr->Lastname << "\t";
+			write << currentptr->mob << "\t";
+			write << currentptr->email << "\t";
+			write << currentptr->password << "\t";
+			write << currentptr->type << "\t";
+			write << currentptr->date;
+			write << endl;
+			currentptr = currentptr->next;
+		}
+		write.close();
+	}
+	else
+	{
+		cout << "Sorry this email is reserved by another person!" << endl;
+	}
+}
+string Person::getEmail()
+{
+	ifstream read("TEMP-FILE.txt");
+	string line;
+	while (!read.eof())
+	{
+		getline(read, line);
+
+	}
+	read.close();
+
+	return line;
+}
+bool Person::SearchEmail(string email)
+{
+	person *ptr = new person;
+	head = NULL;
+	ptr = NULL;
+	read(ptr);
+	bool s = false;
+	ptr = head;
+	while (ptr != NULL)
+	{
+		if (ptr->email == email)
+		{
+			s = true;
+			break;
+		}
+		ptr = ptr->next;
+	}
+	return s;
+}
+void Person::SaveEmail(string e)
+{
+
+	remove("TEMP-FILE.txt");
+	ofstream write("TEMP-FILE.txt", ios::app);
+	write << e;
+}
+//BOTH ADMIN AND CUSTOMER
+void Order::Payment_on_cart(int n, string ci, string ba, string sa)
+{
+	orderNode *o = new orderNode;
+	string sss = "Billing Address";
+	string sss2 = "Shipping Address";
+	string credit = "Payment Info:CREDIT CARD ";
+
+	string cash = "Payment Info:CASH ON DELIVERY ";
+	string c = "=========================================================================";
+	o->Firstname = sss;
+	o->food_name = ba;
+	o->Lastname = sss2;
+	o->type = sa;
+	o->email = c;
+	o->id = ci;
+	if (n == 1)
+	{
+		o->payment = credit;
+
+	}
+	else
+	{
+		o->payment = cash;
+	}
+	ofstream write("MyCart.txt", ios::app);
+	write << endl;
+	write << o->email << endl;
+	write << o->Firstname << ":\t" << o->food_name << endl;
+	write << o->Lastname << ":\t" << o->type << endl;
+	write << o->payment << endl;
+	if (n == 1)
+	{
+		write << "Credit Card Number:\t" << o->id << endl;
+	}
+	write << o->email << endl;
+	write.close();
+}
+void Order::WriteInOrders(orderNode *o, int tp)
+{
+	revenue r;
+	o = oHead;
+	int p = 0;
+	int total = tp;
+	int profit = (total*0.1);
+	string oid;
+	ofstream write("Order.txt", ios::app);
+	while (o != NULL)
+	{
+		p++;
+		if (p == 1)
+		{
+
+			write << "Customer id:\t" << o->restaurant_name << "\nFirst Name\t" << o->id << "\nLast Name\t" << o->food_name << "\nMobile Number:\t" << o->price << "\nEmail:\t" << o->email;
+			oid = o->restaurant_name;
+			r.writeRevenue(oid, total, profit);
+		}
+		else
+		{
+			write << "Resturant Name:\t" << o->restaurant_name << "\nFood id:\t" << o->id << "\nFood Name:\t" << o->food_name << "\nPrice:\t" << o->price << "\nQuantity\t" << o->email;
+		}
+		write << endl;
+		o = o->next;
+	}
+	write << "=========================================================================" << endl;
+	write << "\t\tTotal Price: " << tp << endl;
+	write << "=========================================================================" << endl;
+	write.close();
+}
+void Person::ChangePassword(string email, string pass)
+{
+	Restaurant r;
+	bool s;
+	struct person *ptr, *currentptr, *newptr;
+	ptr = new person;
+	newptr = new person;
+	currentptr = new person;
+	string  a;
+	cout << "**********************************************Change Password*************************************************" << endl;
+	head = NULL;
+	Person P;
+	read(currentptr);
+	string aa;
+	int flag = 0;
+	do
+	{
+		cout << "Enter new Password" << endl;
+		cin >> a;
+		cout << "Re-Enter new Password" << endl;
+		cin >> aa;
+		if (a == aa)
+		{
+			flag = 1;
+			break;
+		}
+	} while (a != aa);
+	int l = a.length();
+	for (int i = 0; i < l; i++)
+	{
+		a[i] = toupper(a[i]);
+	}
+	if (flag == 1)
+	{
+
+		string temp;
+		if (head == NULL)
+		{
+			cout << "No person record found! " << endl;
+		}
+		else
+		{
+			currentptr = head;
+			int pos = 0;
+			while (currentptr != NULL)
+			{
+				pos++;
+				if (email == currentptr->email &&  pass == currentptr->password && pos == 1)
+				{
+					s = true;
+					if (currentptr->password != a)
+					{
+						temp = currentptr->password;
+						cout << currentptr->password << " is updated to " << a << endl;
+					}
+					else
+					{
+						cout << "Password is Same" << endl;
+					}
+					currentptr->password = a;
+					head = currentptr;
+					break;
+				}
+				else if (email == currentptr->email &&  pass == currentptr->password)
+				{
+					s = true;
+					if (currentptr->password != a)
+					{
+						temp = currentptr->password;
+						cout << currentptr->password << " is updated to " << a << endl;
+					}
+					else
+					{
+						cout << "Password is Same" << endl;
+					}
+					currentptr->password = a;
+					break;
+				}
+				else
+				{
+					s = false;
+					currentptr = currentptr->next;
+
+				}
+			}
+			if (s == false)
+			{
+				cout << "No Person Found of email: " << email;
+				cout << endl;
+			}
+			if (head != NULL)
+			{
+				remove("PersonRecord.txt");
+				ofstream write("PersonRecord.txt", ios::app);
+				currentptr = head;
+				while (currentptr != NULL)
+				{
+					write << currentptr->id << "\t";
+					write << currentptr->Firstname << "\t";
+					write << currentptr->Lastname << "\t";
+					write << currentptr->mob << "\t";
+					write << currentptr->email << "\t";
+					write << currentptr->password << "\t";
+					write << currentptr->type << "\t";
+					write << currentptr->date << "\t";
+					write << endl;
+					currentptr = currentptr->next;
+				}
+				write.close();
+			}
+		}
+	}
+	else
+	{
+		cout << "Old and new password aren't same!" << endl;
+	}
+
+}
+string Restaurant::Valid_Name2(string no)//TO CHECK ENTERED NAME CONTAINS ALPHABETS ONLY
+{
+	bool s;
+	do
+	{
+		cin >> no;
+		s = true;
+		int k = no.length();
+		for (int i = 0; i < k; i++)
+		{
+			if ((!isdigit(no[i]) && no[i] >= 'a' && no[i] <= 'z') || (!isdigit(no[i]) && no[i] >= 'A' && no[i] <= 'Z') || no[i] == '_' || no[i] == '-')
+			{
+				s = true;
+
+			}
+			else
+			{
+				cout << "Invalid Input! ";
+				cout << "Enter Again: ";
+				s = false;
+				break;
+			}
+		}
+
+
+	} while (s == false);
+	return no;
+}
+string Restaurant::Valid_Name(string no)//TO CHECK ENTERED NAME CONTAINS ALPHABETS ONLY
+{
+	bool s;
+	do
+	{
+		cin >> no;
+		s = true;
+		int k = no.length();
+		for (int i = 0; i < k; i++)
+		{
+			if ((!isdigit(no[i]) && no[i] >= 'a' && no[i] <= 'z') || (!isdigit(no[i]) && no[i] >= 'A' && no[i] <= 'Z'))
+			{
+				s = true;
+
+			}
+			else
+			{
+				cout << "Invalid Input! ";
+				cout << "Enter Again: ";
+				s = false;
+				break;
+			}
+		}
+
+
+	} while (s == false);
+	return no;
+}
+string Person::Valid_email(string no)//checking email syntax
+{
+	bool s;
+	do
+	{
+		cin >> no;
+		s = false;
+
+		int k = no.length(); int flag = 0;
+		if (no[k - 1] == 'm' && no[k - 2] == 'o' && no[k - 3] == 'c' && no[k - 4] == '.' && ((no[0] >= 'a' && no[0] <= 'z') || (no[0] >= 'A' && no[0] <= 'Z')))
+		{
+
+			flag = 1;
+		}
+
+
+		for (int i = 0; i < k; i++)
+		{
+			if (no[i] == '@')
+			{
+
+				if (flag == 1)
+				{
+
+					s = true;
+					break;
+				}
+				else
+				{
+					s = false;
+				}
+			}
+
+
+		}
+		if (s == false)
+		{
+
+			cout << "Invalid Input! Enter correct email" << endl;
+
+
+
+		}
+
+	} while (s == false);
+	return no;
+}
+string Restaurant::Valid_ID(string no)//TO CHECK IF ID IS IN NUMBERS ONLY.
+{
+	bool s;
+	do
+	{
+		cout << "Enter Restaurant ID : ";
+		cin >> no;
+		s = true;
+		int k = no.length();
+		for (int i = 0; i < k; i++)
+		{
+			if (no[i] <= '9' && no[i] >= '0' && k <= 2)
+			{
+				s = true;
+			}
+			else
+			{
+				cout << "Invalid Input! Enter Again" << endl;
+				s = false;
+				break;
+			}
+
+		}
+	} while (s == false);
+	return no;
+}
+string Person::Valid_Mob_No(string no)//03332211456 TO CHECK MOBILE NUMBER IS VALID OR NOT
+{
+	bool s;
+
+	do
+	{
+		cout << "Mobile: ";
+		cin >> no;
+		s = true;
+		int k = no.length();
+
+		for (int i = 0; i < k; i++)
+		{
+			if (no[i] <= '9' && no[i] >= '0' && k == 11 && no[0] == '0' && no[1] == '3')
+			{
+
+				s = true;
+
+			}
+			else
+			{
+				cout << "Invalid Input! Enter Again" << endl;
+				s = false;
+				break;
+			}
+
+		}
+	} while (s == false);
+	return no;
+}
+string Person::ValidCreditCard(string no)
+{
+	bool s;
+
+	do
+	{
+		cout << "Credit Card Number: ";
+		cin >> no;
+		s = true;
+		int k = no.length();
+
+		for (int i = 0; i < k; i++)
+		{
+			if (no[i] <= '9' && no[i] >= '0' && k == 16)
+			{
+
+				s = true;
+
+			}
+			else
+			{
+				cout << "Invalid Input! Enter Again" << endl;
+				s = false;
+				break;
+			}
+
+		}
+	} while (s == false);
+	return no;
+}
+bool Person::Login(string e, string p)//FOR BOTH ADMIN & USER LOGIN
+{
+	bool s = false;
+	int el = e.length();
+	for (int i = 0; i < el; i++){
+		e[i] = toupper(e[i]);
+
+	}
+	int pl = p.length();
+	for (int i = 0; i < pl; i++)
+	{
+		p[i] = toupper(p[i]);
+	}
+	struct person *ptr;
+	ptr = new person;
+	read(ptr);
+	ptr = head;
+	while (ptr != NULL)
+	{
+		if (ptr->email == e && ptr->password == p && ptr->type == "User")
+		{
+			Order o;
+			o.Customer_write(ptr);
+			Person p;
+			p.SaveEmail(e);
+			p.Customer_Home();
+
+
+			s = true;
+			break;
+		}
+		else if (ptr->email == e && ptr->password == p && ptr->type == "Admin")
+		{
+			Person c;
+			c.SaveEmail(e);
+			c.Admin_Home();
+
+			s = true;
+			break;
+		}
+		else
+		{
+			ptr = ptr->next;
+			s = false;
+		}
+	}
+	return s;
+
+}
+void MainMenu()
+{
+	Restaurant r;
+	int c;
+	char choice;
+	string name, password;
+	do
+	{
+		system("cls");
+		system("color 4F");
+		Sleep(200);
+		cout << "======================================================================================================================" << endl;
+		Sleep(200);
+		cout << "\t\t\t\t\t  TAAZ ONLINE FOOD ORDER SYSTEM" << endl;
+		Sleep(200);
+		cout << "======================================================================================================================" << endl;
+		Sleep(200);
+		cout << "\t\t\t***********************Main Menu***********************" << endl;
+		Sleep(300);
+		cout << "Enter 1 to Login/SignUp " << endl;
+		Sleep(300);
+		cout << "Enter 2 Exit" << endl;
+		Sleep(300);
+
+		cout << "Enter Your Choice\t";
+		cin >> c;
+		if (c == 1)
+		{
+			cout << "Enter 1 if you have already an account and SignIn " << endl;
+			cout << "Enter 2 if you don't have an account and SignUp " << endl;
+			int n;
+			cin >> n;
+			if (n == 1){
+				Person p;
+				cout << "Email: ";
+				string e;
+				cin >> e;
+				cout << "Password: " << endl;
+				string pass;
+				cin >> pass;
+				if (p.Login(e, pass) == true)
+				{
+
+				}
+				else
+				{
+					cout << "invalid email and password" << endl;
+
+				}
+			}
+			else if (n == 2)
+			{
+				Person c;
+
+				c.Registration();
+			}
+			else
+			{
+				cout << "Wrong Input" << endl;
+			}
+		}
+		else if (c == 2)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "Wrong Input" << endl;
+		}
+		cout << "enter y to continue\t";
+		cin >> choice;
+		cout << endl;
+
+		if (choice != 'y' && choice != 'Y')
+		{
+			cout << "Invalid Input!" << endl;
+		}
+		cout << endl;
+
+	} while (choice == 'y' || choice == 'Y');
+}
+void Person::Customer_Home()
+{
+	Person p;
+	char choice;
+	int c;
+	Restaurant r;
+	Customer cc;
+	Order oo;
+
+	do
+	{
+		system("cls");
+		system("color 8B");
+
+		Sleep(200);
+		cout << "======================================================================================================================" << endl;
+		Sleep(200);
+		cout << "\t\t\t\t\t TAAZ ONLINE FOOD ORDER SYSTEM" << endl;
+		Sleep(200);
+		cout << "======================================================================================================================" << endl;
+		Sleep(200);
+		cout << "*****************************************Customer*****************************************" << endl;
+		Sleep(50);
+		cout << "Enter 1 to Select Area" << endl;
+		Sleep(50);
+		cout << "Enter 2 to View MyCart " << endl;
+		Sleep(50);
+		cout << "Enter 3 to Signout" << endl;
+		Sleep(50);
+		cout << "Enter 4 to Exit" << endl;
+		Sleep(50);
+		cout << "Enter 5 to Change Password" << endl;
+
+		cout << "Enter Your Choice\t";
+
+		cin >> c;
+		int payment;
+		if (c == 1)
+		{
+			restaurant *current = new restaurant;
+			string area, rest;
+			char choice;
+			r.Area_resturant_List();
+			do{
+				Sleep(50);
+				cout << "Enter Area: ";
+				cin >> area;
+				int l = area.length();
+				for (int i = 0; i < l; i++)
+				{
+					area[i] = toupper(area[i]);
+
+				}
+			} while (r.searchAreaFromAreaFile(area) == false);
+			system("cls");
+			r.displayCustomerRestaurant(area);
+			do{
+				Sleep(70);
+				cout << "Enter Restaurant's Name: ";
+				cin >> rest;
+				int pl = 0;
+				pl = rest.length();
+				for (int i = 0; i < pl; i++)
+				{
+					rest[i] = toupper(rest[i]);
+				}
+			} while (r.searchRestaurantFromRestaurantFile(rest) == false);
+			system("cls");
+			cc.displayMenu(rest);
+			char pri;
+			string food;
+			cout << "Enter 1 to sort menu by price\n Enter any key to select Food" << endl;
+			cin >> pri;
+			if (pri == '1')
+			{
+				cc.SortMenuByPrice(rest);
+			}
+			int coun = 0;
+			do{
+				do{
+					coun++;
+					int qty = 1;
+					Sleep(200);
+
+					cout << "Enter Food Name to Add to cart" << endl;
+					if (coun == 1)
+					{
+						cin >> food; cin >> food;
+					}
+					else
+					{
+						cin >> food;
+					}
+					if (cc.searchOrder(rest, food) == true)
+					{
+						if (oo.searchFood(rest, food) == true)
+						{
+							Sleep(70);
+
+							cout << "****************=Added=*******************" << endl;
+						}
+
+						else
+						{
+							cc.AddOrder(rest, food, qty);
+						}
+					}
+					else
+					{
+						cout << "**Sorry " + food + " is not avaliable in our restaurant**" << endl;
+
+					}
+
+				} while (cc.searchOrder(rest, food) == false);
+				Sleep(200);
+
+				cout << "Do you want to Add more Items? [y/n] " << endl;
+				Sleep(200);
+
+				cout << "Or Press Any Key to Check Out : ";
+				cin >> choice;
+				system("cls");
+				if (choice == 'y' || choice == 'Y')
+				{
+					cc.displayMenu(rest);
+				}
+
+			} while (choice == 'Y' || choice == 'y');
+			Sleep(150);
+
+			cout << "========================================================Check Out========================================================" << endl;
+			oo.displayMyCart();
+			string ba, sa;
+			Sleep(200);
+
+			cout << "Enter Billing address" << endl;
+			getline(cin, ba);
+			getline(cin, ba);
+			Sleep(200);
+
+			cout << "Enter Shipping address" << endl;
+			getline(cin, sa);
+			string cc; int n1;
+			do
+			{
+				Sleep(200);
+				system("cls");
+				cout << "Select Payment Method: " << endl;
+				Sleep(200);
+
+				cout << "1 - Credit Card" << endl;
+				Sleep(200);
+
+				cout << "2 - Cash on Delivery" << endl;
+				cin >> n1;
+				if (n1 == 1)
+				{
+					string pass;
+					Person p;
+					string temp;
+					cc = p.ValidCreditCard(temp);
+					Sleep(200);
+					cout << "Enter your secret Code" << endl;
+					cin >> pass;
+					Sleep(200);
+
+					cout << "To Place Order Press 1" << endl;
+					cin >> payment;
+				}
+				else if (n1 == 2)
+				{
+					ofstream write("Order.txt", ios::app);
+					write << endl;
+					Sleep(200);
+
+					write << "=============================================================================================" << endl;
+					Sleep(200);
+					write << "Payment Info: Cash on delivery ";
+					Sleep(200);
+					write << "=============================================================================================" << endl;
+					write.close();
+					Sleep(200);
+					cout << "To Place Order Press 1" << endl;
+					cin >> payment;
+				}
+				else
+
+				{
+					Sleep(200);
+					cout << "wrong payment information! TRY AGAIN" << endl;
+					Sleep(200);
+
+					cout << "press any key to try again!\t";
+					cin >> payment;
+					cout << endl;
+				}
+
+
+			} while (payment != 1);
+			system("cls");
+
+			int s1;
+			string status;
+			Sleep(200);
+			cout << "Press 1 to Review Order" << endl;
+			Sleep(200);
+			cout << "Press Any key to Cancel your Order" << endl;
+			cin >> s1;
+			if (s1 == 1)
+			{
+
+				status = "Processed";
+				oo.pp(n1, cc, ba, sa, status);
+				oo.Payment_on_cart(n1, cc, ba, sa);
+				oo.Mycart();
+				Sleep(200);
+				cout << "********************Thank You for ordering!***********************" << endl;
+				Sleep(200);
+				cout << "Your Order will be deliver as soon as possible" << endl;
+			}
+			else
+			{
+				status = "Cancelled";
+				oo.pp(n1, cc, ba, sa, status);
+				oo.Payment_on_cart(n1, cc, ba, sa);
+				Sleep(400);
+				cout << "********************YOUR ORDER HAS BEEN CANCEL!***********************" << endl;
+
+			}
+
+
+		}
+		else if (c == 2)
+		{
+			oo.Mycart();
+		}
+		else if (c == 3)
+		{
+			MainMenu();
+		}
+		else if (c == 4)
+		{
+			exit(0);
+		}
+		else if (c == 5)
+		{
+			string n, e;
+			n = p.getEmail();
+
+			cout << "Old Password" << endl;
+			cin >> e;
+
+			p.ChangePassword(n, e);
+		}
+		else
+		{
+			Sleep(200);
+			cout << "Enter valid value" << endl;
+		}
+		Sleep(200);
+		cout << "Enter Y to continue\t";
+		cin >> choice;
+		cout << endl;
+		if (choice != 'y' && choice != 'Y')
+
+		{
+			Sleep(200);
+			cout << "Invalid Input!" << endl;
+		}
+		cout << endl;
+
+	}
+
+	while (choice == 'y' || choice == 'Y');
+}
+void Person::Admin_Home()
+{
+	revenue rrrr;
+	Customer cc;
+	Order oo;
+	Restaurant r;
+	char choice;
+	int c;
+	do
+	{
+		system("cls");
+		system("color 4F");
+		cout << "======================================================================================================================" << endl;
+		cout << "\t\t\t\t\tONLINE FOOD ORDER SYSTEM" << endl;
+		cout << "======================================================================================================================" << endl;
+		cout << "*****************************************Administrator*****************************************" << endl;
+
+		cout << "Enter 1 to Display Resturant's List" << endl;
+		cout << "Enter 2 to Add Resturant " << endl;
+		cout << "Enter 3 to Update Resturant's List " << endl;
+		cout << "Enter 4 to Delete Resturant " << endl;
+		cout << "Enter 5 to Display Customer Record " << endl;
+		cout << "Enter 6 to Display Order Details" << endl;
+		cout << "Enter 7 to Display Food Menu " << endl;
+		cout << "Enter 8 to Update Food Menu " << endl;
+		cout << "Enter 9 to Add Food Item to the Menu" << endl;
+		cout << "Enter 10 to Update Password" << endl;
+		cout << "Enter 11 to Signout" << endl;
+		cout << "Enter 12 to SEE REVENUE" << endl;
+		cout << "Enter 13 to Search Customer" << endl;
+		cout << "Enter 14 to exit" << endl;
+
+		Person a;
+		cout << "Enter Your Choice\t";
+		cin >> c;
+		if (c == 1)
+		{
+			r.display();
+			cout << "Enter 1 to sort list by Restaurant names" << endl;
+			cout << "Enter 2 to Search Restaurants Area wise" << endl;
+			cout << "Enter 3 to Go back to menu" << endl;
+			int d;
+			cin >> d;
+			if (d == 1)
+			{
+				system("cls");
+				cout << "==============================Sort By Names===================================" << endl;
+				r.SortRestaurantNames();
+			}
+			else if (d == 2)
+			{
+				system("cls");
+
+				Restaurant rr;
+				string area;
+				string aa;
+				do{
+					Sleep(50);
+					cout << "Enter Area: ";
+					area = rr.Valid_Name2(aa);
+					int l = area.length();
+					for (int i = 0; i < l; i++)
+					{
+						area[i] = toupper(area[i]);
+
+					}
+				} while (r.searchAreaFromAreaFile(area) == false);
+				r.displayCustomerRestaurant(area);
+
+			}
+			else if (d == 3)
+			{
+				Admin_Home();
+			}
+			else
+			{
+				cout << "Wrong input" << endl;
+			}
+		}
+		else if (c == 2)
+		{
+			r.add_restaurant();
+		}
+		else if (c == 3)
+		{
+			r.update_Resturant();
+		}
+		else if (c == 4)
+		{
+			r.delete_Resturant();
+		}
+		else if (c == 5)
+		{
+			a.customer_Info();
+			cout << "Enter 1 to sort list by date" << endl;
+			cout << "Enter 2 to sort list alphabetically" << endl;
+			cout << "Enter 3 to Go back to main menu" << endl;
+			int d;
+			cin >> d;
+			if (d == 1)
+			{
+				Person p;
+				p.SortByDates();
+			}
+			else if (d == 3)
+			{
+				Admin_Home();
+			}
+			else if (d == 2)
+			{
+				Person p;
+				p.CustomerInfoBynames();
+
+			}
+			else
+			{
+				cout << "Wrong input" << endl;
+			}
+		}
+		else if (c == 6)
+		{
+			oo.Order_Details();
+		}
+		else if (c == 7)
+		{
+			cout << "Enter Restaurant's name" << endl;
+			string mm;
+			string rest;
+			rest = r.Valid_Name2(mm);
+			int l = rest.length();
+			for (int i = 0; i < l; i++)
+			{
+				rest[i] = toupper(rest[i]);
+			}
+			cc.displayWholeMenu(rest);
+			char pri;
+			cout << "Enter 1 to sort menu by price" << endl;
+			cout << "Enter 2 to add more foods in menu" << endl;
+			cout << "Enter 3 to UPDATE food Price in menu" << endl;
+
+			cin >> pri;
+			if (pri == '1')
+			{
+				cc.SortMenuByPrice(rest);
+			}
+			else if (pri == '2')
+			{
+				char ch;
+				do{
+					system("cls");
+					system("color 3F");
+					Customer r;
+					r.InsertInFoodMenu(rest);
+					r.displayWholeMenu(rest);
+					cout << "Do You Want to Add more Foods? [y/n]: ";
+					cin >> ch;
+				} while (ch == 'y' || ch == 'Y');
+
+			}
+			else if (pri == '3')
+			{
+				char CG;
+				do{
+					system("cls");
+					system("color 2F");
+					string  fn;
+					string m;
+					cout << "Enter Food Name to be Updated: ";
+					fn = r.Valid_Name2(fn);
+					if (cc.searchOrder(rest, fn) == true)
+					{
+						cc.updateFoodMenu(rest, fn);
+						cc.displayWholeMenu(rest);
+					}
+					else
+					{
+						cout << "Sorry this Food is not avaliable in " + rest;
+					}
+					cout << "Do You Want to Upadte more Foods? [y/n]: ";
+					cin >> CG;
+				} while (CG == 'y' || CG == 'Y');
+			}
+		}
+		else if (c == 8)
+		{
+			char ch;
+			do{
+				string rn, fn;
+				cout << "Enter Restaurant's Name: ";
+				cin >> rn;
+				cc.displayMenu(rn);
+				cout << "Enter Food Name to be Updated: ";
+				cin >> fn;
+				if (cc.searchOrder(rn, fn) == true)
+				{
+					cc.updateFoodMenu(rn, fn);
+				}
+				else
+				{
+					cout << "Sorry this Food is not avaliable in " + rn;
+				}
+				cout << "Do You Want to Upadte more Foods? [y/n]: ";
+				cin >> ch;
+			} while (ch == 'y' || ch == 'Y');
+		}
+		else if (c == 9)
+		{
+			char ch;
+			string rn;
+			cout << "Enter Restaurant's Name: ";
+			cin >> rn;
+			do{
+				cc.InsertInFoodMenu(rn);
+				cout << "Add Another Item? [y/n]: ";
+				cin >> ch;
+			} while (ch == 'y' || ch == 'Y');
+		}
+		else if (c == 10){
+			Person p;
+			string n, e;
+			n = p.getEmail();
+
+			cout << "Old Password" << endl;
+			cin >> e;
+
+			p.ChangePassword(n, e);
+		}
+		else if (c == 11){
+			MainMenu();
+		}
+		else if (c == 12)
+		{
+			rrrr.diplayRevenue();
+		}
+
+		else if (c == 14){
+			exit(0);
+		}
+		else if (c == 13){
+			Person p;
+			string a;
+			cout << "Enter ID";
+			cin >> a;
+			p.binarySearch(a);
+		}
+		else
+		{
+			cout << "Enter valid value" << endl;
+		}
+		cout << "enter y to continue\t";
+		cin >> choice;
+		cout << endl;
+		if (choice != 'y' && choice != 'Y')
+		{
+			cout << "Invalid Input!" << endl;
+		}
+		cout << endl;
+	} while (choice == 'y' || choice == 'Y');
+}
+int main()
+{
+	system("color 5F");
+	cout << "\n\n\n\t\t\t\tWELCOME TO TAAZ ONLINE FOOD ORDER!...\n";
+	char a = 177, b = 219;
+	cout << "\t\t\t\t";
+	for (int i = 0; i <= 15; i++)
+		cout << a;
+	cout << "\r";
+	cout << "\t\t\t\t";
+	for (int i = 0; i <= 15; i++)
+	{
+		cout << b;
+		for (int j = 0; j <= 1e8; j++); //You can also use sleep function instead of for loop
+	}
+
+
+
+
+
+	MainMenu();
+
+	system("pause");
+}
+
+
