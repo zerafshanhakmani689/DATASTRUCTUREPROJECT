@@ -1,0 +1,34 @@
+                          CSC-221 DATA STRUCTURES AND ALGORITHMS LAB
+
+
+STUDENT REG#:  45940 	  STUDENT NAME: Muhamma Taha Khan 
+
+STUDENT REG#:  45927            STUDENT NAME: Asif Ahmed
+
+STUDENT REG#:  45897      	STUDENT NAME: Asna Tariq
+
+STUDENT REG#:  45934    	STUDENT NAME: Zerafshan Aslam
+
+
+Course instructor: Adnan Ahmed
+
+Lab instructor: Irfan Mustafa
+
+
+
+                                                            INDIVIDUALS CINTRIBUTIONS
+      
+* TAHA kHAN                   ||    :)     work on sorting technique used (**bubble and selection sort**) in different areas such as
+                                                    (sort restaurants using their alphabets, sort food items using their price, and also apply this sorting technique in customer information).
+                                             :)     work on documentation .
+  
+*ASNA TARIQ                ||      :)    work on searching technique used (**binary**,**linear** and **sequential** searching) in different areas to search 
+                                                     (Food, Restaurants,Customer Information and Location). 
+                                              :)   work on ppts
+
+*ASIF ZAIDI                    ||     :)       work on searching technique used (**binary**,**linear** and **sequential** searching) in different areas to search 
+                                                      (Food, Restaurants,Customer Information and Location). 
+                                             :)        work on documentation .
+
+*ZERAFSHAN ASLAM    ||       :)     work on doubly link list which is used in overall project.
+                                              :)     workon all the document which is uploaded in github site except presentation.
